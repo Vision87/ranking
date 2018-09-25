@@ -38,6 +38,7 @@ class Admin extends React.Component {
               <TableCell>Name</TableCell>
               <TableCell>Id</TableCell>
               <TableCell>Points</TableCell>
+              <TableCell>Points2</TableCell>
               <TableCell>win_streak</TableCell>
               <TableCell>max_win_streak</TableCell>
               <TableCell>points_trend</TableCell>
@@ -67,6 +68,7 @@ class Admin extends React.Component {
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.id}</TableCell>
                     <TableCell>{user.points}</TableCell>
+                    <TableCell>{user.points2}</TableCell>
                     <TableCell>{user.stats.win_streak}</TableCell>
                     <TableCell>{user.stats.max_win_streak}</TableCell>
                     <TableCell>{user.stats.points_trend}</TableCell>

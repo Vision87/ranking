@@ -17,18 +17,21 @@ const GetMatchesStartingFromDateAndUsersFromMatchId = async id => {
     includes: function (user) {
       return Object.keys(this).includes(user.slug)
     },
-    add: function (user, rankDifference, winner) {
+    add: function (user, rankDifference, rankDifference2, winner) {
       this[user.slug] = {
         id: user._id,
         name: user.name,
-        points: user.points + (winner ? - Math.abs(rankDifference) : Math.abs(rankDifference))
+        points: user.points + (winner ? - Math.abs(rankDifference) : Math.abs(rankDifference)),
+        points2: user.points2 + (winner ? - Math.abs(rankDifference2) : Math.abs(rankDifference2))
       }
     },
-    update: function (user, rankDifference, winner) {
+    update: function (user, rankDifference, rankDifference2, winner) {
       this[user.slug].points = this[user.slug].points + (winner ? - Math.abs(rankDifference) : Math.abs(rankDifference))
+      this[user.slug].points2 = this[user.slug].points2 + (winner ? - Math.abs(rankDifference2) : Math.abs(rankDifference2))
     },
-    setPoints: function (slug, points) {
+    setPoints: function (slug, points, points2) {
       this[slug].points = points
+      this[slug].points2 = points2
     },
     getUser: function (slug) {
       return this[slug]
@@ -66,27 +69,27 @@ const GetMatchesStartingFromDateAndUsersFromMatchId = async id => {
     const awayStriker = teamAway.striker
 
     if (users.includes(homeDefender)) {
-      users.update(homeDefender, match.difference, homeWin)
+      users.update(homeDefender, match.difference, match.difference2, homeWin)
     } else {
-      users.add(homeDefender, match.difference, homeWin)
+      users.add(homeDefender, match.difference, match.difference2, homeWin)
     }
 
     if (users.includes(homeStriker)) {
-      users.update(homeStriker, match.difference, homeWin)
+      users.update(homeStriker, match.difference, match.difference2, homeWin)
     } else {
-      users.add(homeStriker, match.difference, homeWin)
+      users.add(homeStriker, match.difference, match.difference2, homeWin)
     }
 
     if (users.includes(awayDefender)) {
-      users.update(awayDefender, match.difference, !homeWin)
+      users.update(awayDefender, match.difference, match.difference2, !homeWin)
     } else {
-      users.add(awayDefender, match.difference, !homeWin)
+      users.add(awayDefender, match.difference, match.difference2, !homeWin)
     }
 
     if (users.includes(awayStriker)) {
-      users.update(awayStriker, match.difference, !homeWin)
+      users.update(awayStriker, match.difference, match.difference2, !homeWin)
     } else {
-      users.add(awayStriker, match.difference, !homeWin)
+      users.add(awayStriker, match.difference, match.difference2, !homeWin)
     }
 
     matchesToRankify.push({
@@ -138,13 +141,16 @@ const GetMatchesStartingFromDateAndUsersFromMatchId = async id => {
       teamAway: match.teamAway
     })
 
-    users.setPoints(match.teamHome.defender.slug, rank.homeDefense)
-    users.setPoints(match.teamHome.striker.slug, rank.homeStriker)
-    users.setPoints(match.teamAway.defender.slug, rank.awayDefense)
-    users.setPoints(match.teamAway.striker.slug, rank.awayStriker)
+    users.setPoints(match.teamHome.defender.slug, rank.homeDefense, rank.homeDefense2)
+    users.setPoints(match.teamHome.striker.slug, rank.homeStriker, rank.homeStriker2)
+    users.setPoints(match.teamAway.defender.slug, rank.awayDefense, rank.awayDefense2)
+    users.setPoints(match.teamAway.striker.slug, rank.awayStriker, rank.awayStriker2)
 
     matches.push(
-      Object.assign({}, match, {difference: rank.difference})
+      Object.assign({}, match, {
+        difference: rank.difference,
+        difference2: rank.difference2
+      })
     )
   })
 

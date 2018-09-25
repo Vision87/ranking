@@ -114,13 +114,11 @@ class IndexMatch extends React.Component {
               <GridListTile style={styleMatchScore}>
                 <Link as={`/match/${match._id}`} href={`/matches/detail/?slug=${match._id}`}>
                   <Button variant="fab" mini color="primary">
-                    {match.teamHome.score} - {match.teamAway.score}
+                    {match.teamHome.score}
                   </Button>
                 </Link>
                 <Badge color="secondary" badgeContent={<small>{match.teamHome.defScore}</small>} style={stylePlayerScore('defender','home')}> </Badge>
                 <Badge color="secondary" badgeContent={<small>{match.teamHome.strScore}</small>} style={stylePlayerScore('striker','home')}> </Badge>
-                <Badge color="secondary" badgeContent={<small>{match.teamAway.defScore}</small>} style={stylePlayerScore('defender','away')}> </Badge>
-                <Badge color="secondary" badgeContent={<small>{match.teamAway.strScore}</small>} style={stylePlayerScore('striker','away')}> </Badge>
               </GridListTile>
               <GridListTile style={styleTeamTile('left')}>
                 <Chip

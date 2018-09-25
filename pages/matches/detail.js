@@ -25,6 +25,7 @@ const defaultPlayer = {
 
 class DetailMatch extends React.Component {
   constructor (props) {
+    console.log(props)
     super(props)
     this.state = {
     //   activeSelection: null,

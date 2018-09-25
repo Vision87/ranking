@@ -8,11 +8,12 @@ const getUsersStats = async () => {
     includes: function (user) {
       return Object.keys(this).includes(user.slug)
     },
-    add: function (user, stats, rankDifference) {
+    add: function (user, stats, rankDifference, rankDifference2) {
       this[user.slug] = {
         id: user._id,
         name: user.name,
         points: stats.matchWin === 1 ? 1200 + Math.abs(rankDifference) : 1200 - Math.abs(rankDifference),
+        points2: stats.matchWin === 1 ? 1200 + Math.abs(rankDifference2) : 1200 - Math.abs(rankDifference2),
         stats: {
           win_streak: stats.winStreak, // current matches winned in row
           max_win_streak: stats.maxWinStreak, // max matches winned in row
@@ -36,11 +37,12 @@ const getUsersStats = async () => {
         }
       }
     },
-    update: function (user, stats, winner, rankDifference) {
+    update: function (user, stats, winner, rankDifference, rankDifference2) {
       const winAgain = winner && this[user.slug].stats.last_winned
       const looseAgain = !winner && !this[user.slug].stats.last_winned
 
       this[user.slug].points = this[user.slug].points + (winner ? Math.abs(rankDifference) : - Math.abs(rankDifference))
+      this[user.slug].points2 = this[user.slug].points + (winner ? Math.abs(rankDifference2) : - Math.abs(rankDifference2))
       this[user.slug].stats.win_streak = winner ? this[user.slug].stats.win_streak + 1 : 0
       this[user.slug].stats.max_win_streak = winAgain ? this[user.slug].stats.max_win_streak + 1 : this[user.slug].stats.max_win_streak
       this[user.slug].stats.points_trend =
@@ -118,27 +120,27 @@ const getUsersStats = async () => {
     const awayStrikerStats = generateUserStats(false, !homeWin, teamAway, teamHome)
 
     if (users.includes(homeDefender)) {
-      users.update(homeDefender, homeDefenderStats, homeWin, match.difference)
+      users.update(homeDefender, homeDefenderStats, homeWin, match.difference, match.difference2)
     } else {
-      users.add(homeDefender, homeDefenderStats, match.difference)
+      users.add(homeDefender, homeDefenderStats, match.difference, match.difference2)
     }
 
     if (users.includes(homeStriker)) {
-      users.update(homeStriker, homeStrikerStats, homeWin, match.difference)
+      users.update(homeStriker, homeStrikerStats, homeWin, match.difference, match.difference2)
     } else {
-      users.add(homeStriker, homeStrikerStats, match.difference)
+      users.add(homeStriker, homeStrikerStats, match.difference, match.difference2)
     }
 
     if (users.includes(awayDefender)) {
-      users.update(awayDefender, awayDefenderStats, !homeWin, match.difference)
+      users.update(awayDefender, awayDefenderStats, !homeWin, match.difference, match.difference2)
     } else {
-      users.add(awayDefender, awayDefenderStats, match.difference)
+      users.add(awayDefender, awayDefenderStats, match.difference, match.difference2)
     }
 
     if (users.includes(awayStriker)) {
-      users.update(awayStriker, awayStrikerStats, !homeWin, match.difference)
+      users.update(awayStriker, awayStrikerStats, !homeWin, match.difference, match.difference2)
     } else {
-      users.add(awayStriker, awayStrikerStats, match.difference)
+      users.add(awayStriker, awayStrikerStats, match.difference, match.difference2)
     }
   }
 

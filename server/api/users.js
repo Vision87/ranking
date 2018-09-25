@@ -15,6 +15,8 @@ router.get('/get/:slug', async (req, res) => {
           slug: 'mucci',
           name: 'Gabo',
           avatarUrl: 'http://localhost:8000/img/user_placeholder.jpg',
+          description: 'Lorem Ipsum',
+          role: 'jolly',
           points: 1200
         },
         {
@@ -22,6 +24,8 @@ router.get('/get/:slug', async (req, res) => {
           slug: 'mucci',
           name: 'Mucci',
           avatarUrl: 'http://localhost:8000/img/user_placeholder.jpg',
+          description: 'Lorem Ipsum',
+          role: 'jolly',
           points: 1200
         },
         {
@@ -29,6 +33,8 @@ router.get('/get/:slug', async (req, res) => {
           slug: 'mucci',
           name: 'Moiolish',
           avatarUrl: 'http://localhost:8000/img/user_placeholder.jpg',
+          description: 'Lorem Ipsum',
+          role: 'jolly',
           points: 1200
         },
         {
@@ -36,6 +42,8 @@ router.get('/get/:slug', async (req, res) => {
           slug: 'mucci',
           name: 'The Boss',
           avatarUrl: 'http://localhost:8000/img/user_placeholder.jpg',
+          description: 'Lorem Ipsum',
+          role: 'jolly',
           points: 1200
         },
         {
@@ -43,6 +51,8 @@ router.get('/get/:slug', async (req, res) => {
           slug: 'mucci',
           name: 'giamma',
           avatarUrl: 'http://localhost:8000/img/user_placeholder.jpg',
+          description: 'Lorem Ipsum',
+          role: 'jolly',
           points: 1200
         }
       )
@@ -66,13 +76,16 @@ router.get('/get', async (req, res) => {
 })
 
 router.post('/add', (req, res) => {
-  const { name, avatarUrl } = req.body
+  const { name, avatarUrl, slackID, description, role } = req.body
   const slug = User.generateSlug()
   const userData = {
     name,
     slug,
     points: 1200,
     avatarUrl,
+    slackID,
+    description,
+    role,
     active: true
   }
   const newUser = new User(userData)
@@ -83,9 +96,9 @@ router.post('/add', (req, res) => {
 })
 
 router.post('/update', (req, res) => {
-  const { slug, name, avatarUrl } = req.body
+  const { slug, name, avatarUrl, slackID, description, role } = req.body
   const query = { slug: slug }
-  User.findOneAndUpdate(query, { name, avatarUrl }, {}, function (err, rs) {
+  User.findOneAndUpdate(query, { name, avatarUrl, slackID, description, role }, {}, function (err, rs) {
     if (err) return res.json({ error: err.message || err.toString() })
     res.json(rs)
   })

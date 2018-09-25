@@ -40,12 +40,12 @@ export const mainDrawerMatch = (
         <ListItemText primary="Matches list"/>
       </ListItem>
     </Link>
-    <Link href="/matches/new">
+    <Link href="/matches/fast">
       <ListItem button>
         <ListItemIcon>
           <NewMatchIcon/>
         </ListItemIcon>
-        <ListItemText primary="New match"/>
+        <ListItemText primary="New match (beta)"/>
       </ListItem>
     </Link>
   </div>

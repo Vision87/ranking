@@ -3,11 +3,13 @@ const next = require('next')
 const mongoose = require('mongoose')
 const api = require('./api')
 
+const auth = require('basic-auth')
+
 require('dotenv').config()
 
-const dev = process.env.NODE_ENV !== 'production'
+const dev = process.env.v !== 'production'
 const port = process.env.PORT || 8000
-const ROOT_URL = dev ? `http://localhost:${port}` : 'https://murmuring-meadow-82162.herokuapp.com'
+const ROOT_URL = dev ? `http://localhost:${port}` : 'https://www.scoreza.it/'
 
 const MONGO_URL = process.env.MONGO_URL
 
@@ -23,20 +25,32 @@ mongoose.connect(MONGO_URL, {}, err => {
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
+function isAuthenticated(req, res, next) {
+  const credentials = auth(req)
+  if (credentials && credentials.name === 'john' && credentials.pass === 'secret') {
+    return next()
+  }
+  // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+  res.statusCode = 401
+  res.setHeader('WWW-Authenticate', 'Basic realm="Scoreza Access"')
+  res.end('Access denied')
+}
+
+
 app.prepare().then(() => {
   const server = express()
 
-  if (!dev) {
-    server.use (function (req, res, next) {
-      if (req.headers['x-forwarded-proto'] == 'https') {
-        // request was via https, so do no special handling
-        next();
-      } else {
-        // request was via http, so redirect to https
-        res.redirect('https://' + req.headers.host + req.url);
-      }
-    })
-  }
+  // if (!dev) {
+  //   server.use (function (req, res, next) {
+  //     if (req.headers['x-forwarded-proto'] == 'https') {
+  //       // request was via https, so do no special handling
+  //       next();
+  //     } else {
+  //       // request was via http, so redirect to https
+  //       res.redirect('https://' + req.headers.host + req.url);
+  //     }
+  //   })
+  // }
 
   server.use(express.static('public'))
 
@@ -50,6 +64,10 @@ app.prepare().then(() => {
 
   server.get('/match/:slug', (req, res) => {
     return app.render(req, res, `/matches/detail`, { slug: req.params.slug })
+  })
+
+  server.get('/admin*', isAuthenticated, (req, res) => {
+    return handle(req, res)
   })
 
   // give all Nextjs's request to Nextjs server

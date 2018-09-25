@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
+import CountUp from 'react-countup'
 
 import Layout from '../../components/Layout.js'
 import { getUsersList, deleteUser } from '../../lib/api/users'
@@ -51,11 +52,11 @@ const rowHeaderStyle = {
 }
 
 const cellStyle = {
-  whiteSpace: 'nowrap',
-  width: 30,
-  padding: 0,
   border: '1px solid #C6C6C6',
-  textAlign: 'center'
+  padding: '0 10px',
+  textAlign: 'center',
+  whiteSpace: 'nowrap',
+  minWidth: 46,
 }
 
 class IndexUser extends React.Component {
@@ -94,13 +95,15 @@ class IndexUser extends React.Component {
             <Link as={`/users/${user.slug}`} href={`/users/update/?slug=${user.slug}`}>
             <ListItem
               key={user.slug}
+              style={{overflow: 'hidden', padding: '14px 0'}}
               divider
             >
 
                 <Typography
                   style={{
-                    paddingRight: 15,
-                    fontSize: 22
+                    padding: '0px 6px',
+                    fontSize: 22,
+                    minWidth: '36px',
                   }}
                 >
                   {index + 1}
@@ -111,18 +114,22 @@ class IndexUser extends React.Component {
                     src={user.avatarUrl}
                     style={{
                       height: 80,
+                      margin: '0px 10px',
                       width: 80
                     }}
                   />
                 </ListItemAvatar>
                 <ListItemText
+                  style={{minWidth: '100px', padding: '0px 6px'}}
                   primary={user.name}
                   primaryTypographyProps={{
                     style: {
-                      fontSize: 15
+                      fontSize: 15,
+                      overflowX: 'hidden',
+                      textOverflow: 'ellipsis',
                     }
                   }}
-                  secondary={user.points}
+                  secondary={<CountUp start={1200} end={user.points} duration={3}/>}
                   secondaryTypographyProps={{
                     style: {
                       fontSize: 18,
@@ -142,10 +149,10 @@ class IndexUser extends React.Component {
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell style={cellStyle}>{user.stats.match_played}</TableCell>
-                      <TableCell style={cellStyle}>{user.stats.match_win}</TableCell>
-                      <TableCell style={cellStyle}>{user.stats.match_goals_made}</TableCell>
-                      <TableCell style={cellStyle}>{user.stats.match_goals_conceded}</TableCell>
+                      <TableCell style={cellStyle}><CountUp start={0} end={user.stats.match_played} duration={2.00}/></TableCell>
+                      <TableCell style={cellStyle}><CountUp start={0} end={user.stats.match_win} duration={2.20}/></TableCell>
+                      <TableCell style={cellStyle}><CountUp start={0} end={user.stats.match_goals_made} duration={3.00}/></TableCell>
+                      <TableCell style={cellStyle}><CountUp start={0} end={user.stats.match_goals_conceded} duration={1.80}/></TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -162,7 +169,6 @@ class IndexUser extends React.Component {
       </Layout>
     )
   }
-
 
 }
 export default IndexUser

@@ -22,14 +22,19 @@ class AdminMatches extends React.Component {
   }
 
   static async getInitialProps() {
-    const matches = await getMatchesList(0, 200)
+    const matches = await getMatchesList(0, 250)
     return {
       matches: matches.matches
     }
   }
 
-  matchRank = () => {
-    sendRequest('/api/v1/admin/rank/update/5b857b08bc7a3f00e81bbf53')
+  matchRank = async () => {
+    const firstMatch = '5b83e204e6d7d1004ed108d7'
+    const data = await sendRequest('/api/v1/admin/rank/update', {body: JSON.stringify({ matchId: firstMatch })})
+    const matches = await getMatchesList()
+    this.setState({
+      matches: matches.matches
+    })
   }
 
   onDelete = async (matchId) => {
@@ -71,6 +76,7 @@ class AdminMatches extends React.Component {
               <TableCell>Away Striker</TableCell>
               <TableCell>Away Score</TableCell>
               <TableCell>Diff</TableCell>
+              <TableCell>DiffOld</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -95,6 +101,7 @@ class AdminMatches extends React.Component {
                     <TableCell>{match.teamAway.striker.name}</TableCell>
                     <TableCell>{match.teamAway.score}</TableCell>
                     <TableCell>{match.difference}</TableCell>
+                    <TableCell>{match.difference2}</TableCell>
                   </TableRow>
                 )
               })

@@ -38,7 +38,7 @@ const styles = {
   main: {
     backgroundColor: 'rgba(255, 255, 255, 0.75)',
     margin: '0 auto',
-    maxWidth: '480px',
+    maxWidth: '768px',
     minHeight: 'calc(100vh - 128px)',
     padding: '30px 20px',
     position: 'relative'

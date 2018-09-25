@@ -16,9 +16,10 @@ const styles = {
     background: `url(${getRootUrl()}/img/logo.png) no-repeat center center`,
     backgroundSize: 'cover',
     display: 'inline-block',
-    height: '100%',
+    height: '65px',
     textDecoration: 'none',
     flexBasis: 200,
+    marginTop: '12px',
   },
   menuButton: {
     color: indigo[700],
@@ -29,13 +30,18 @@ const styles = {
     },
     '&:hover': {
       color: indigo[700]
-    }
+    },
+  },
+  innerHeader: {
+    margin: '0 auto',
+    maxWidth: '920px',
+    width: '100%',
   }
 }
 
 const Header = ({classes, handler}) => (
-  <AppBar position="fixed">
-    <Toolbar style={styleToolbar}>
+  <AppBar position="fixed" style={{backgroundColor: '#fff'}}>
+    <Toolbar style={styleToolbar} className={classes.innerHeader}>
       <Link href="/">
         <a title='Kalpunde is watching you' className={classes.logo} />
       </Link>

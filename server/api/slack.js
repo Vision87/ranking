@@ -1,23 +1,19 @@
 
 const express = require('express')
-
+const slack = require('../lib/slack')
 const router = express.Router()
 
 router.get('/test', async (req, res) => {
+    slack.sendMessage(
+        'Mucci caccia il grano!',
+        process.env.SLACK_TOKEN,
+        process.env.SLACK_CHANNEL_ID
+    )
+})
 
-    const { WebClient } = require('@slack/client')
+router.post('/challenge', async (req, res) => {
 
-    const token = 'xoxp-432288382578-431710618481-433554132487-5a3b9f688ef574be8b3ef950f3249407'
-
-    const web = new WebClient(token)
-
-    const conversationId = 'CCQ537VJ7'
-
-    web.chat.postMessage({ channel: conversationId, text: 'Mucci caccia il grano!'}).then(
-        (res) => {
-            console.log('Message sent: ', res.ts)
-        }
-    ).catch(console.error)
+    res.json({ "challenge": req.body.challenge })
 
 })
 
